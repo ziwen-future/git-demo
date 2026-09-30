@@ -1,5 +1,7 @@
 (() => {
   const STORAGE_KEY = "todo-app-items";
+  const CHECKIN_KEY = "todo-app-checkins";
+  const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
 
   const form = document.getElementById("todo-form");
   const input = document.getElementById("todo-input");
@@ -8,9 +10,89 @@
   const clearBtn = document.getElementById("clear-completed");
   const filterBtns = document.querySelectorAll(".filter");
 
+  const checkinStatus = document.getElementById("checkin-status");
+  const checkinBtn = document.getElementById("checkin-btn");
+  const checkinStreak = document.getElementById("checkin-streak");
+  const checkinTotal = document.getElementById("checkin-total");
+  const checkinWeek = document.getElementById("checkin-week");
+
   /** @type {{ id: string, text: string, done: boolean }[]} */
   let todos = loadTodos();
+  /** @type {string[]} */
+  let checkins = loadCheckins();
   let filter = "all";
+
+  function dateKey(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function loadCheckins() {
+    try {
+      const raw = localStorage.getItem(CHECKIN_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((item) => typeof item === "string") : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCheckins() {
+    localStorage.setItem(CHECKIN_KEY, JSON.stringify(checkins));
+  }
+
+  function streakCount() {
+    const set = new Set(checkins);
+    const cursor = new Date();
+    if (!set.has(dateKey(cursor))) {
+      cursor.setDate(cursor.getDate() - 1);
+      if (!set.has(dateKey(cursor))) return 0;
+    }
+    let count = 0;
+    while (set.has(dateKey(cursor))) {
+      count += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return count;
+  }
+
+  function renderCheckin() {
+    const today = dateKey(new Date());
+    const checkedToday = checkins.includes(today);
+    checkinStatus.textContent = checkedToday ? "今天已打卡" : "今天还没打卡";
+    checkinBtn.textContent = checkedToday ? "已打卡" : "打卡";
+    checkinBtn.disabled = checkedToday;
+    checkinStreak.textContent = `连续 ${streakCount()} 天`;
+    checkinTotal.textContent = `累计 ${checkins.length} 次`;
+
+    checkinWeek.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+    for (let offset = 6; offset >= 0; offset -= 1) {
+      const day = new Date();
+      day.setDate(day.getDate() - offset);
+      const key = dateKey(day);
+      const li = document.createElement("li");
+      li.className = "checkin-day";
+      if (key === today) li.classList.add("is-today");
+      if (checkins.includes(key)) li.classList.add("is-done");
+
+      const label = document.createElement("span");
+      label.className = "checkin-day-label";
+      label.textContent = WEEKDAYS[day.getDay()];
+
+      const mark = document.createElement("span");
+      mark.className = "checkin-mark";
+      mark.setAttribute("aria-hidden", "true");
+
+      li.append(label, mark);
+      li.setAttribute("aria-label", `${key} ${checkins.includes(key) ? "已打卡" : "未打卡"}`);
+      fragment.appendChild(li);
+    }
+    checkinWeek.appendChild(fragment);
+  }
 
   function loadTodos() {
     try {
@@ -103,6 +185,14 @@
     updateMeta();
   }
 
+  checkinBtn.addEventListener("click", () => {
+    const today = dateKey(new Date());
+    if (checkins.includes(today)) return;
+    checkins.push(today);
+    saveCheckins();
+    renderCheckin();
+  });
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const text = input.value.trim();
@@ -166,5 +256,6 @@
   });
 
   render();
+  renderCheckin();
   input.focus();
 })();

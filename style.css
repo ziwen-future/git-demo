@@ -166,6 +166,121 @@ body {
   transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+.checkin {
+  margin-bottom: 1.15rem;
+  padding: 0.95rem 1rem 0.85rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.04s both;
+}
+
+.checkin-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.checkin-kicker {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.checkin-status {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.checkin-meta {
+  display: flex;
+  gap: 0.9rem;
+  margin: 0.7rem 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.btn-checkin {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 5px;
+  padding: 0.7rem 1.2rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  background: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s, opacity 0.15s;
+}
+
+.btn-checkin:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-checkin:active:not(:disabled) {
+  transform: scale(0.96) skewX(-2deg);
+}
+
+.btn-checkin:disabled {
+  color: var(--accent-ink);
+  background: var(--done);
+  cursor: default;
+  opacity: 1;
+}
+
+.checkin-week {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+}
+
+.checkin-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.checkin-day-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.checkin-day.is-today .checkin-day-label {
+  color: var(--accent);
+}
+
+.checkin-mark {
+  width: 100%;
+  height: 0.45rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.checkin-day.is-done .checkin-mark {
+  background: linear-gradient(90deg, var(--signal), var(--accent));
+}
+
 .composer {
   display: flex;
   gap: 0.5rem;

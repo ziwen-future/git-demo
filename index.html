@@ -19,11 +19,26 @@
         <span class="badge">SET</span>
       </div>
       <h1>把今天打完</h1>
-      <p class="lead">添加、勾选、清理。进度自动记在本机。</p>
+      <p class="lead">添加、勾选、打卡。进度自动记在本机。</p>
       <div class="lane" aria-hidden="true">
         <span class="lane-fill" id="progress-fill"></span>
       </div>
     </header>
+
+    <section class="checkin" aria-labelledby="checkin-title">
+      <div class="checkin-head">
+        <div>
+          <p class="checkin-kicker" id="checkin-title">打卡</p>
+          <p class="checkin-status" id="checkin-status">今天还没打卡</p>
+        </div>
+        <button type="button" class="btn-checkin" id="checkin-btn">打卡</button>
+      </div>
+      <div class="checkin-meta">
+        <span id="checkin-streak">连续 0 天</span>
+        <span id="checkin-total">累计 0 次</span>
+      </div>
+      <ol class="checkin-week" id="checkin-week" aria-label="近七日打卡"></ol>
+    </section>
 
     <form class="composer" id="todo-form" autocomplete="off">
       <label class="sr-only" for="todo-input">新待办</label>
