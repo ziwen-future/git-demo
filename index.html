@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>待办 · Todo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="hero">
+      <div class="brand-row">
+        <p class="brand">待办</p>
+        <span class="badge">SET</span>
+      </div>
+      <h1>把今天打完</h1>
+      <p class="lead">添加、勾选、清理。进度自动记在本机。</p>
+      <div class="lane" aria-hidden="true">
+        <span class="lane-fill" id="progress-fill"></span>
+      </div>
+    </header>
+
+    <form class="composer" id="todo-form" autocomplete="off">
+      <label class="sr-only" for="todo-input">新待办</label>
+      <input
+        id="todo-input"
+        type="text"
+        name="todo"
+        placeholder="例如：间歇跑 8 组、拉伸 10 分钟…"
+        maxlength="120"
+        required
+      />
+      <button type="submit" class="btn-add">添加</button>
+    </form>
+
+    <div class="toolbar">
+      <div class="filters" role="tablist" aria-label="筛选待办">
+        <button type="button" class="filter is-active" data-filter="all" role="tab" aria-selected="true">全部</button>
+        <button type="button" class="filter" data-filter="active" role="tab" aria-selected="false">未完成</button>
+        <button type="button" class="filter" data-filter="completed" role="tab" aria-selected="false">已完成</button>
+      </div>
+      <p class="count" id="todo-count" aria-live="polite"></p>
+    </div>
+
+    <ul class="todo-list" id="todo-list" aria-label="待办列表"></ul>
+
+    <footer class="footer">
+      <button type="button" class="btn-clear" id="clear-completed" hidden>清除已完成</button>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
